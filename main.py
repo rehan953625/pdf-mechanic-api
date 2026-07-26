@@ -7,7 +7,15 @@ from docx import Document
 import pandas as pd
 
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Ye sabhi websites ko allow kar dega
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 API_KEY = "AQ.Ab8RN6KyIsTXKWRHPFtOydfgEaFWqFCFBptZNfH9LJbsQrXZ4g"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-3.6-flash')
