@@ -19,12 +19,14 @@ app.add_middleware(
 )
 
 # Render se API key uthana
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+raw_api_key = os.getenv("GEMINI_API_KEY")
 
-if GEMINI_API_KEY:
+if raw_api_key:
+    # YAHAN HAI MAGIC: .strip() key ke aage-peeche ke kisi bhi invisible space ko hata dega
+    GEMINI_API_KEY = raw_api_key.strip()
+    
     genai.configure(api_key=GEMINI_API_KEY)
-    # Wapas aapka sahi model laga diya hai!
-    model = genai.GenerativeModel('gemini-3.6-flash') 
+    model = genai.GenerativeModel('gemini-3.6-flash')
 else:
     model = None
 
@@ -38,9 +40,8 @@ async def extract_text(
     file: UploadFile = File(...),
     language: str = Form("English")
 ):
-    # DEBUG 1: Agar Render ne key di hi nahi
     if not model:
-        return {"status": "error", "message": "RENDER ERROR: API Key bilkul khali hai! Render ne os.getenv() me kuch nahi diya."}
+        return {"status": "error", "message": "RENDER ERROR: API Key Render se nahi aayi!"}
         
     try:
         file_bytes = await file.read()
@@ -66,13 +67,10 @@ async def extract_text(
         return {"status": "success", "text": response.text}
         
     except Exception as e:
-        # DEBUG 2: Yahan hum check karenge ki Render ne jo key bheji hai, uski length kitni hai
-        key_length = len(GEMINI_API_KEY) if GEMINI_API_KEY else 0
-        return {"status": "error", "message": f"API KEY LENGTH: {key_length} | ERROR: {str(e)}"}
+        return {"status": "error", "message": f"Google API Error: {str(e)}"}
 
 @app.post("/api/download-file")
 async def download_file(text: str = Form(...), format: str = Form(...)):
-    # ... (Aapka purana download_file code yahan rahega, usme koi problem nahi hai) ...
     if format == "txt":
         return Response(content=text, media_type="text/plain", headers={"Content-Disposition": "attachment; filename=extracted_text.txt"})
     elif format == "docx":
