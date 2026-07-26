@@ -19,6 +19,7 @@ app.add_middleware(
 )
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
+print("API KEY STATUS --->", "Haan mil gayi!" if GEMINI_API_KEY else "Bhai key nahi aayi, khali hai!")
 model = genai.GenerativeModel('gemini-3.6-flash')
 
 @app.get("/", response_class=HTMLResponse)
