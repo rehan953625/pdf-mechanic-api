@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, UploadFile, File, Form, Response
 from fastapi.responses import HTMLResponse
 import google.generativeai as genai
