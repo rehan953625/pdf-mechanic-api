@@ -16,8 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-API_KEY = os.getenv("AQ.Ab8RN6KyIsTXKWRHPFtOydfgEaFWqFCFBptZNfH9LJbsQrXZ4g")
-genai.configure(api_key=GOOGLE_API_KEY)
+GEMINI_API_KEY = os.getenv("AQ.Ab8RN6KyIsTXKWRHPFtOydfgEaFWqFCFBptZNfH9LJbsQrXZ4g")
+genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-3.6-flash')
 
 @app.get("/", response_class=HTMLResponse)
